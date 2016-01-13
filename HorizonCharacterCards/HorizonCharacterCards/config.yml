@@ -1,0 +1,15 @@
+default gender: Ambiguous
+default age: 20
+default race: Human
+default description: "Who's this asshole?"
+max name length: 30
+max description length: 300
+min age: 5
+max age: 150
+valid genders:
+- female
+- male
+- ambiguous
+valid races:
+- human
+- droid

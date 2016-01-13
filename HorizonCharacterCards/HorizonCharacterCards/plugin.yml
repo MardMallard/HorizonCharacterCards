@@ -1,0 +1,20 @@
+name: HorizonCharacterCards
+main: com.gmail.Rhisereld.HorizonCharacterCards.Main
+version: 1.0
+commands:
+  card:
+    description: All Horizon Character Card commands.
+    aliases: c
+    permissions: horizoncards.help
+    
+permissions:
+  horizoncards.common:
+    description: Access to Horizon Character Cards for normal players.
+    children:
+      horizoncards.view: true
+      horizoncards.set: true
+      horizoncards.set.name: true
+      horizoncards.set.age: true
+      horizoncards.set.gender: true
+      horizoncards.set.race: true
+      horizoncards.set.description: true
