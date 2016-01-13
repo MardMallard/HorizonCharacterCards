@@ -28,7 +28,7 @@ public class Main extends JavaPlugin
     	config.saveDefaultConfig();
     	
     	//Listeners and commands.
-        getServer().getPluginManager().registerEvents(new CardListener(), this);
+        getServer().getPluginManager().registerEvents(new CardListener(config.getConfig(), data.getConfig()), this);
     	this.getCommand("card").setExecutor(new HorizonCommandParser(config.getConfig(), data.getConfig()));
     	
     	//Save every 30 minutes.

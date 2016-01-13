@@ -3,6 +3,7 @@ package com.gmail.Rhisereld.HorizonCharacterCards;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -217,5 +218,96 @@ public class Card
 		
 		this.description += description;
 		data.set(path + "description", this.description);
+	}
+	
+	public void view(Player player)
+	{
+		String pronoun = getPronoun();
+		String lookConjugated = conjugate("look");
+		
+		player.sendMessage(new String[]{ChatColor.GREEN + "*---------*",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + "Oh, this is " + name + ", " + getDescribe() + ".",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " like a " + race + ".",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + ".",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + description,
+			ChatColor.GREEN + "*---------*"});
+	}
+	
+	/**
+	 * getDescribe() returns a string describing the player based on their age and gender.
+	 * Age pieces: young, [nothing], elderly
+	 * Gender pieces: girl, boy, woman, man, person
+	 * 
+	 * @param card
+	 * @return
+	 */
+	private String getDescribe()
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		
+		if (age < 16)
+			if (gender.equalsIgnoreCase("female"))
+				return "a young girl";
+			else if (gender.equalsIgnoreCase("male"))
+				return "a young boy";
+			else
+				return "a young person";
+		
+		if (age < 36)
+			stringBuilder.append("a young ");
+		else if (age < 56)
+			stringBuilder.append("a ");
+		else
+			stringBuilder.append("an elderly ");
+		
+		if (gender.equalsIgnoreCase("female"))
+			stringBuilder.append("woman");
+		else if (gender.equalsIgnoreCase("male"))
+			stringBuilder.append("man");
+		else
+			stringBuilder.append("person");
+		
+		return stringBuilder.toString();
+	}
+	
+	/**
+	 * getPronown() returns a pronoun based on the player's gender.
+	 * Female: she
+	 * Male: he
+	 * Otherwise: they
+	 * 
+	 * @param gender
+	 * @return
+	 */
+	private String getPronoun()
+	{
+		if (gender.equalsIgnoreCase("Female"))
+			return "She";
+		if (gender.equalsIgnoreCase("Male"))
+			return "He";
+		return "They";
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param player
+	 * @return
+	 */
+	private String getHealthDescription(Player player)
+	{
+		if (player.getHealth() <= 6)
+			return "seriously injured";
+		if (player.getHealth() < 20)
+			return "slightly injured";
+		return "completely healthy";
+	}
+	
+	private String conjugate(String string)
+	{
+		if (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"))
+			string += "s";
+		
+		return string;
 	}
 }
