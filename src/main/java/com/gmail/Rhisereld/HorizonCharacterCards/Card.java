@@ -17,6 +17,7 @@ public class Card
 	String race;
 	String description;
 	String path;
+	String currentCard;
 
 	/**
 	 * Constructor for fetching card.
@@ -49,12 +50,15 @@ public class Card
 		if (name.length() > config.getInt("max name length", 30))
 			throw new IllegalArgumentException("Name is too long.");
 		
-		data.set("cards." + ownerUUID + "." + name + ".age", getAge());
-		data.set("cards." + ownerUUID + "." + name + ".gender", getGender());
-		data.set("cards." + ownerUUID + "." + name + ".race", getRace());
-		data.set("cards." + ownerUUID + "." + name + ".description", getDescription());
-		data.getConfigurationSection(path).set(this.name, null);
+		data.set("cards." + ownerUUID + "." + name + ".age", age);
+		data.set("cards." + ownerUUID + "." + name + ".gender", gender);
+		data.set("cards." + ownerUUID + "." + name + ".race", race);
+		data.set("cards." + ownerUUID + "." + name + ".description", description);
+		data.getConfigurationSection("cards." + ownerUUID + ".").set(this.name, null);
 		path = "cards." + ownerUUID + "." + name + ".";
+		currentCard = name;
+		data.set("cards." + ownerUUID + ".currentCard", currentCard);
+		
 		this.name = name;
 	}
 	
