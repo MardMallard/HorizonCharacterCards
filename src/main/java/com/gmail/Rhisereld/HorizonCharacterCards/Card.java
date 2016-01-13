@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -235,6 +236,7 @@ public class Card
 		for (ItemStack i: contents)
 			if (i == null)
 				freeSlots++;
+		int threatLevel = getThreatLevel(cardOwner);
 
 		player.sendMessage(new String[]{ChatColor.GREEN + "*---------*",
 			ChatColor.GREEN + "* " + ChatColor.WHITE + "Oh, this is " + name + ", " + getDescribe() + ".",
@@ -245,6 +247,11 @@ public class Card
 		if (freeSlots < 18)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " burdened with a lot of "
 					+ "items.");
+		if (threatLevel >= 5)
+			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " armed to the teeth.");
+		else if (threatLevel >= 1)
+			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + conjugate("has") + " a weapon strapped to "
+					+ getPossessive() + " hip.");
 		player.sendMessage(new String[]{ChatColor.GREEN + "* " + ChatColor.WHITE + description,
 			ChatColor.GREEN + "*---------*"});
 	}
@@ -297,9 +304,9 @@ public class Card
 	 */
 	private String getPronoun()
 	{
-		if (gender.equalsIgnoreCase("Female"))
+		if (gender.equalsIgnoreCase("female"))
 			return "She";
-		if (gender.equalsIgnoreCase("Male"))
+		if (gender.equalsIgnoreCase("male"))
 			return "He";
 		return "They";
 	}
@@ -321,9 +328,39 @@ public class Card
 	
 	private String conjugate(String string)
 	{
-		if (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"))
+		if (string.equalsIgnoreCase("has"))
+			if (gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("male"))
+				return string;
+			else
+				return "have";
+		
+		if (gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("male"))
 			string += "s";
 		
 		return string;
+	}
+	
+	private int getThreatLevel(Player player)
+	{
+		int threat = 0;
+		
+		for (String w: config.getConfigurationSection("weapon threat levels").getKeys(false))
+			if (Material.getMaterial(w) != null)
+				for (int i = 0; i < 9; i++)
+				    if (player.getInventory().getItem(i) != null 
+				    		&& player.getInventory().getItem(i).getType().equals(Material.getMaterial(w)))
+				    	threat += config.getInt("weapon threat levels." + w);
+		
+		return threat;
+	}
+	
+	private String getPossessive()
+	{
+		if (gender.equalsIgnoreCase("female"))
+			return "her";
+		if (gender.equalsIgnoreCase("male"))
+			return "his";
+		else
+			return "their";
 	}
 }

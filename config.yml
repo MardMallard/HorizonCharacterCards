@@ -13,3 +13,8 @@ valid genders:
 valid races:
 - human
 - droid
+weapon threat levels:
+  DIAMOND_SWORD: 5
+  GOLD_SWORD: 5
+  IRON_SWORD: 3
+  WOOD_SWORD: 1
