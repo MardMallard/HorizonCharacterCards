@@ -82,9 +82,9 @@ public class Card
 		int maxAge = config.getInt("max age", 150);
 		
 		if (age < minAge)
-			throw new IllegalArgumentException("The minimum age is " + minAge);
+			throw new IllegalArgumentException("The minimum age is " + minAge + ".");
 		if (age > maxAge)
-			throw new IllegalArgumentException("The maximum age is " + maxAge);
+			throw new IllegalArgumentException("The maximum age is " + maxAge + ".");
 		
 		this.age = age;
 		data.set(path + "age", age);

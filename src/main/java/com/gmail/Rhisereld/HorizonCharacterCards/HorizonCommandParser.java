@@ -185,7 +185,12 @@ public class HorizonCommandParser implements CommandExecutor
 		Player player = (Player) sender;
 		try { new Card(config, data, player).setName(name); }
 		catch (IllegalArgumentException e)
-		{ sender.sendMessage(ChatColor.RED + e.getMessage());}
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Name set to: " + name);
 	}
 	
 	/**
@@ -211,9 +216,17 @@ public class HorizonCommandParser implements CommandExecutor
 		Player player = (Player) sender;
 		try { new Card(config, data, player).setAge(Integer.parseInt(age)); }
 		catch (NumberFormatException e)
-		{ sender.sendMessage(ChatColor.RED + "That is not a valid number."); }
+		{ 
+			sender.sendMessage(ChatColor.RED + "That is not a valid number."); 
+			return;
+		}
 		catch (IllegalArgumentException e)
-		{ sender.sendMessage(ChatColor.RED + e.getMessage()); }
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage()); 
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Age set to: " + age);
 	}
 	
 	/**
@@ -239,7 +252,12 @@ public class HorizonCommandParser implements CommandExecutor
 		Player player = (Player) sender;
 		try { new Card(config, data, player).setGender(gender); }
 		catch (IllegalArgumentException e)
-		{ sender.sendMessage(ChatColor.RED + e.getMessage());}
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Gender set to: " + gender);
 	}
 	
 	/**
@@ -265,7 +283,12 @@ public class HorizonCommandParser implements CommandExecutor
 		Player player = (Player) sender;
 		try { new Card(config, data, player).setRace(race); }
 		catch (IllegalArgumentException e)
-		{ sender.sendMessage(ChatColor.RED + e.getMessage());}
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Race set to: " + race);
 	}
 	
 	/**
@@ -291,7 +314,12 @@ public class HorizonCommandParser implements CommandExecutor
 		Player player = (Player) sender;
 		try { new Card(config, data, player).setDescription(description); }
 		catch (IllegalArgumentException e)
-		{ sender.sendMessage(ChatColor.RED + e.getMessage());}
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Description set to: " + description);
 	}
 	
 	/**
