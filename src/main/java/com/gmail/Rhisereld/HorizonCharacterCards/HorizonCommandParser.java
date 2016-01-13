@@ -89,7 +89,7 @@ public class HorizonCommandParser implements CommandExecutor
 				//card set description [description]
 				else if (args[1].equalsIgnoreCase("description"))
 					if (args.length >= 3)
-						setDescription(sender, args[2]);
+						setDescription(sender, args);
 					else
 					{
 						sender.sendMessage(ChatColor.GREEN + "Proper usage: /card set description [description]");
@@ -297,7 +297,7 @@ public class HorizonCommandParser implements CommandExecutor
 	 * @param sender
 	 * @param description
 	 */
-	private void setDescription(CommandSender sender, String description)
+	private void setDescription(CommandSender sender, String[] description)
 	{
 		if (!sender.hasPermission("horizoncards.set.description") || !sender.hasPermission("horizoncards.set"))
 		{
@@ -312,14 +312,20 @@ public class HorizonCommandParser implements CommandExecutor
 		}
 		
 		Player player = (Player) sender;
-		try { new Card(config, data, player).setDescription(description); }
+		StringBuilder builder = new StringBuilder();
+		for (int i = 2; i < description.length; i++)
+		{
+		    builder.append(description[i]);
+		    builder.append(" ");
+		}
+		try { new Card(config, data, player).setDescription(builder.toString()); }
 		catch (IllegalArgumentException e)
 		{ 
 			sender.sendMessage(ChatColor.RED + e.getMessage());
 			return;
 		}
 		
-		sender.sendMessage(ChatColor.GREEN + "Description set to: " + description);
+		sender.sendMessage(ChatColor.GREEN + "Description set to: " + builder.toString());
 	}
 	
 	/**
