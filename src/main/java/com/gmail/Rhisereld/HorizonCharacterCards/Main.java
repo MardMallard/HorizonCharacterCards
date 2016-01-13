@@ -1,5 +1,6 @@
 package com.gmail.Rhisereld.HorizonCharacterCards;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin 
@@ -29,6 +30,15 @@ public class Main extends JavaPlugin
     	//Listeners and commands.
         getServer().getPluginManager().registerEvents(new CardListener(), this);
     	this.getCommand("card").setExecutor(new HorizonCommandParser(config.getConfig(), data.getConfig()));
+    	
+    	//Save every 30 minutes.
+		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
+		{
+			public void run() 
+			{
+				data.saveConfig();
+			}			
+		} , 36000, 36000);
 	}
 	
 	/**
@@ -39,6 +49,7 @@ public class Main extends JavaPlugin
      */
 	public void onDisable()
 	{
+		data.saveConfig();
 		config = null;
 		data = null;
 	}
