@@ -25,8 +25,12 @@ public class CardListener implements Listener
 		if (!(event.getRightClicked() instanceof Player))
 			return;
 		
-		Player player = (Player) event.getRightClicked();
+		//Shift-click only.
 		Player clicker = event.getPlayer();
+		if (!clicker.isSneaking())
+			return;
+		
+		Player player = (Player) event.getRightClicked();
 		new Card(config, data, player).view(clicker);
 	}
 }

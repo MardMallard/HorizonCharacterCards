@@ -3,6 +3,7 @@ package com.gmail.Rhisereld.HorizonCharacterCards;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -61,6 +62,9 @@ public class Card
 		data.set("cards." + ownerUUID + ".currentCard", currentCard);
 		
 		this.name = name;
+		
+		//Set nickname in chat.
+		Bukkit.getPlayer(ownerUUID).setDisplayName(name);
 	}
 	
 	/**

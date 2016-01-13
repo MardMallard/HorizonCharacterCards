@@ -47,7 +47,7 @@ public class HorizonCommandParser implements CommandExecutor
 				//card set name [name]
 				else if (args[1].equalsIgnoreCase("name"))
 					if (args.length >= 3)
-						setName(sender, args[2]);
+						setName(sender, args);
 					else
 					{
 						sender.sendMessage(ChatColor.GREEN + "Proper usage: /card set name [name]");
@@ -166,7 +166,7 @@ public class HorizonCommandParser implements CommandExecutor
 	 * @param sender
 	 * @param name
 	 */
-	private void setName(CommandSender sender, String name)
+	private void setName(CommandSender sender, String[] name)
 	{
 		if (!sender.hasPermission("horizoncards.set.name") || !sender.hasPermission("horizoncards.set"))
 		{
@@ -180,15 +180,26 @@ public class HorizonCommandParser implements CommandExecutor
 			return;
 		}
 		
+		//Build the name - may be multiple words
 		Player player = (Player) sender;
-		try { new Card(config, data, player).setName(name); }
+		StringBuilder builder = new StringBuilder();
+		for (int i = 2; i < name.length; i++)
+		{
+		    builder.append(name[i]);
+		    builder.append(" ");
+		}
+		if (builder.length() > 0)
+			builder.setLength(builder.length() - 1);
+			   
+		//Set the name
+		try { new Card(config, data, player).setName(builder.toString()); }
 		catch (IllegalArgumentException e)
 		{ 
 			sender.sendMessage(ChatColor.RED + e.getMessage());
 			return;
 		}
 		
-		sender.sendMessage(ChatColor.GREEN + "Name set to: " + name);
+		sender.sendMessage(ChatColor.GREEN + "Name set to: " + builder.toString());
 	}
 	
 	/**
