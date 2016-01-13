@@ -231,6 +231,7 @@ public class Card
 		String pronoun = getPronoun();
 		String lookConjugated = conjugate("look");
 		Player cardOwner = Bukkit.getPlayer(ownerUUID);
+		String health = getHealthDescription(player);
 		ItemStack[] contents = cardOwner.getInventory().getContents();
 		int freeSlots = 0;
 		for (ItemStack i: contents)
@@ -240,8 +241,9 @@ public class Card
 
 		player.sendMessage(new String[]{ChatColor.GREEN + "*---------*",
 			ChatColor.GREEN + "* " + ChatColor.WHITE + "Oh, this is " + name + ", " + getDescribe() + ".",
-			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " like a " + race + ".",
-			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + "."});
+			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " like a " + race + "."});
+		if (health != null)
+			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + ".");
 		if (cardOwner.getFoodLevel() <= 6)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE  + pronoun + " " + lookConjugated + " malnourished.");
 		if (freeSlots < 18)
@@ -323,7 +325,7 @@ public class Card
 			return "seriously injured";
 		if (player.getHealth() < 20)
 			return "slightly injured";
-		return "completely healthy";
+		return null;
 	}
 	
 	private String conjugate(String string)
