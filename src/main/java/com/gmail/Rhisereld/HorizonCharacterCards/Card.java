@@ -30,6 +30,7 @@ public class Card
 		
 		ownerUUID = player.getUniqueId();
 		name = data.getString("cards." + ownerUUID + ".currentCard", player.getName());
+		data.set("cards." + ownerUUID + ".currentCard", name);
 		path = "cards." + ownerUUID + "." + name + ".";
 		age = data.getInt(path + "age");
 		gender = data.getString(path + "gender", config.getString("default gender"));
@@ -52,8 +53,8 @@ public class Card
 		data.set("cards." + ownerUUID + "." + name + ".gender", getGender());
 		data.set("cards." + ownerUUID + "." + name + ".race", getRace());
 		data.set("cards." + ownerUUID + "." + name + ".description", getDescription());
+		data.getConfigurationSection(path).set(this.name, null);
 		path = "cards." + ownerUUID + "." + name + ".";
-		data.getConfigurationSection("cards." + ownerUUID + ".").set(this.name, null);
 		this.name = name;
 	}
 	
@@ -86,7 +87,7 @@ public class Card
 			throw new IllegalArgumentException("The maximum age is " + maxAge);
 		
 		this.age = age;
-		data.set("cards." + ownerUUID + ".name", age);
+		data.set(path + "age", age);
 	}
 	
 	/**
@@ -113,7 +114,7 @@ public class Card
 			if (gender.equalsIgnoreCase(g))
 			{
 				this.gender = g;
-				data.set("cards." + ownerUUID + ".gender", g);
+				data.set(path + "gender", g);
 				return;
 			}
 		
@@ -150,7 +151,7 @@ public class Card
 			if (race.equalsIgnoreCase(r))
 			{
 				this.race = r;
-				data.set("cards." + ownerUUID + ".race", r);
+				data.set(path + "race", r);
 				return;
 			}
 		
@@ -185,7 +186,7 @@ public class Card
 			throw new IllegalArgumentException("That description is too long.");
 		
 		this.description = description;
-		data.set("cards." + ownerUUID + ".description", description);
+		data.set(path + "description", description);
 	}
 	
 	/**
@@ -211,6 +212,6 @@ public class Card
 			throw new IllegalArgumentException("Total description is too long");
 		
 		this.description += description;
-		data.set("cards." + ownerUUID + ".description", this.description);
+		data.set(path + "description", this.description);
 	}
 }
