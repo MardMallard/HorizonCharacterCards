@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class Card 
 {
@@ -229,14 +230,21 @@ public class Card
 		String pronoun = getPronoun();
 		String lookConjugated = conjugate("look");
 		Player cardOwner = Bukkit.getPlayer(ownerUUID);
+		ItemStack[] contents = cardOwner.getInventory().getContents();
+		int freeSlots = 0;
+		for (ItemStack i: contents)
+			if (i == null)
+				freeSlots++;
 
 		player.sendMessage(new String[]{ChatColor.GREEN + "*---------*",
 			ChatColor.GREEN + "* " + ChatColor.WHITE + "Oh, this is " + name + ", " + getDescribe() + ".",
 			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " like a " + race + ".",
 			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + "."});
-		if (Bukkit.getPlayer(ownerUUID).getFoodLevel() <= 6)
+		if (cardOwner.getFoodLevel() <= 6)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE  + pronoun + " " + lookConjugated + " malnourished.");
-		
+		if (freeSlots < 18)
+			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " burdened with a lot of "
+					+ "items.");
 		player.sendMessage(new String[]{ChatColor.GREEN + "* " + ChatColor.WHITE + description,
 			ChatColor.GREEN + "*---------*"});
 	}
