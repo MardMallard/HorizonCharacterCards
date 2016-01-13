@@ -228,12 +228,16 @@ public class Card
 	{
 		String pronoun = getPronoun();
 		String lookConjugated = conjugate("look");
-		
+		Player cardOwner = Bukkit.getPlayer(ownerUUID);
+
 		player.sendMessage(new String[]{ChatColor.GREEN + "*---------*",
 			ChatColor.GREEN + "* " + ChatColor.WHITE + "Oh, this is " + name + ", " + getDescribe() + ".",
 			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " like a " + race + ".",
-			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + ".",
-			ChatColor.GREEN + "* " + ChatColor.WHITE + description,
+			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + "."});
+		if (Bukkit.getPlayer(ownerUUID).getFoodLevel() <= 6)
+			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE  + pronoun + " " + lookConjugated + " malnourished.");
+		
+		player.sendMessage(new String[]{ChatColor.GREEN + "* " + ChatColor.WHITE + description,
 			ChatColor.GREEN + "*---------*"});
 	}
 	

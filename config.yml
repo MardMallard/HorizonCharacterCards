@@ -1,6 +1,6 @@
 default gender: Ambiguous
 default age: 20
-default race: Human
+default race: human
 default description: "Who's this asshole?"
 max name length: 30
 max description length: 300
