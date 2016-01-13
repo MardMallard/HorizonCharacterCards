@@ -40,29 +40,62 @@ public class HorizonCommandParser implements CommandExecutor
 			
 			//card set
 			else if (args[0].equalsIgnoreCase("set"))
-			{
-				if (args.length < 3)
-					sender.sendMessage(ChatColor.RED + "Insufficient arguments");
+			{	
+				if (args.length < 2)
+					givePossibleAttributes(sender);
 				
 				//card set name [name]
 				else if (args[1].equalsIgnoreCase("name"))
-					setName(sender, args[1]);
+					if (args.length >= 3)
+						setName(sender, args[2]);
+					else
+					{
+						sender.sendMessage(ChatColor.GREEN + "Proper usage: /card set name [name]");
+						sender.sendMessage(ChatColor.GREEN + "Enter a name under " + config.getInt("max name length") 
+								+ " characters.");
+					}
 				
 				//card set age [age]
 				else if (args[1].equalsIgnoreCase("age"))
-					setAge(sender, args[1]);
+					if (args.length >= 3)
+						setAge(sender, args[2]);
+					else
+					{
+						sender.sendMessage(ChatColor.GREEN + "Proper usage: /card set age [age]");
+						sender.sendMessage(ChatColor.GREEN + "Enter an age between " + config.getInt("min age") + " and " 
+											+ config.getInt("max age") + ".");
+					}
 				
 				//card set gender [gender]
 				else if (args[1].equalsIgnoreCase("gender") || args[1].equalsIgnoreCase("sex"))
-					setGender(sender, args[1]);
+					if (args.length >= 3)
+						setGender(sender, args[2]);
+					else
+					{
+						sender.sendMessage(ChatColor.GREEN + "Proper usage: /card set gender [gender]");
+						sender.sendMessage(ChatColor.GREEN + "Choose a gender from: " + config.getStringList("valid genders"));
+					}
 				
 				//card set race [race]
 				else if (args[1].equalsIgnoreCase("race"))
-					setRace(sender, args[1]);
+					if (args.length >= 3)
+						setRace(sender, args[2]);
+					else
+					{
+						sender.sendMessage(ChatColor.GREEN + "Proper usage: /card set race [race]");
+						sender.sendMessage(ChatColor.GREEN + "Choose a race from: " + config.getStringList("valid races"));
+					}
 				
 				//card set description [description]
 				else if (args[1].equalsIgnoreCase("description"))
-					setDescription(sender, args[1]);
+					if (args.length >= 3)
+						setDescription(sender, args[2]);
+					else
+					{
+						sender.sendMessage(ChatColor.GREEN + "Proper usage: /card set description [description]");
+						sender.sendMessage(ChatColor.GREEN + "Enter a description under " + config.getInt("max description length") 
+											+ "characters.");
+					}
 				else
 					givePossibleAttributes(sender);
 			}
@@ -243,7 +276,7 @@ public class HorizonCommandParser implements CommandExecutor
 	 */
 	private void setDescription(CommandSender sender, String description)
 	{
-		if (!sender.hasPermission("horizoncards.set.decription") || !sender.hasPermission("horizoncards.set"))
+		if (!sender.hasPermission("horizoncards.set.description") || !sender.hasPermission("horizoncards.set"))
 		{
 			sender.sendMessage(ChatColor.RED + "You don't have permission to set your description.");
 			return;
@@ -268,9 +301,9 @@ public class HorizonCommandParser implements CommandExecutor
 	 */
 	private void givePossibleAttributes(CommandSender sender)
 	{	
-		if (!(sender.hasPermission("horizoncards.set.name") || sender.hasPermission("horizoncards.set.age") 
+		if (sender instanceof Player && !(sender.hasPermission("horizoncards.set.name") || sender.hasPermission("horizoncards.set.age") 
 				|| sender.hasPermission("horizoncards.set.gender") || sender.hasPermission("horizoncards.set.race")
-				|| sender.hasPermission("horizoncards.set.description")) || sender.hasPermission("horizoncards.set"))
+				|| sender.hasPermission("horizoncards.set.description") || sender.hasPermission("horizoncards.set")))
 		{
 			sender.sendMessage(ChatColor.RED + "You don't have permission to set any attributes in your character card.");
 			return;

@@ -11,6 +11,7 @@ permissions:
   horizoncards.common:
     description: Access to Horizon Character Cards for normal players.
     children:
+      horizoncards.help: true
       horizoncards.view: true
       horizoncards.set: true
       horizoncards.set.name: true
