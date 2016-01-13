@@ -37,7 +37,7 @@ public class Card
 		name = data.getString("cards." + ownerUUID + ".currentCard", player.getName());
 		data.set("cards." + ownerUUID + ".currentCard", name);
 		path = "cards." + ownerUUID + "." + name + ".";
-		age = data.getInt(path + "age");
+		age = data.getInt(path + "age", config.getInt("default age"));
 		gender = data.getString(path + "gender", config.getString("default gender"));
 		race = data.getString(path + "race", config.getString("default race"));
 		description = data.getString(path + "description", config.getString("default description"));
