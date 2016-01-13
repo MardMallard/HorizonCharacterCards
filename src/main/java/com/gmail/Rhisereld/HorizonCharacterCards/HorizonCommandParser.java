@@ -158,8 +158,15 @@ public class HorizonCommandParser implements CommandExecutor
 		
 		Player player = (Player) sender;
 		Card card = new Card(config, data, player);
+		String pronoun = getPronoun(card.getGender());
+		String lookConjugated = conjugate("look", card.getGender());
 		
-		//TODO
+		sender.sendMessage(new String[]{ChatColor.GREEN + "*---------*",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + "Oh, this is " + card.getName() + ", " + getDescribe(card) + ".",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " like a " + card.getRace() + ".",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + ".",
+			ChatColor.GREEN + "* " + ChatColor.WHITE + card.getDescription(),
+			ChatColor.GREEN + "*---------*"});
 	}
 	
 	/**
@@ -369,5 +376,85 @@ public class HorizonCommandParser implements CommandExecutor
 			message += " description";
 		
 		sender.sendMessage(ChatColor.GREEN + message);
+	}
+	
+	/**
+	 * getDescribe() returns a string describing the player based on their age and gender.
+	 * Age pieces: young, [nothing], elderly
+	 * Gender pieces: girl, boy, woman, man, person
+	 * 
+	 * @param card
+	 * @return
+	 */
+	private String getDescribe(Card card)
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		int age = card.getAge();
+		String gender = card.getGender();
+		
+		if (age < 16)
+			if (gender.equalsIgnoreCase("female"))
+				return "a young girl";
+			else if (gender.equalsIgnoreCase("male"))
+				return "a young boy";
+			else
+				return "a young person";
+		
+		if (age < 36)
+			stringBuilder.append("a young ");
+		else if (age < 56)
+			stringBuilder.append("a ");
+		else
+			stringBuilder.append("an elderly ");
+		
+		if (gender.equalsIgnoreCase("female"))
+			stringBuilder.append("woman");
+		else if (gender.equalsIgnoreCase("male"))
+			stringBuilder.append("man");
+		else
+			stringBuilder.append("person");
+		
+		return stringBuilder.toString();
+	}
+	
+	/**
+	 * getPronown() returns a pronoun based on the player's gender.
+	 * Female: she
+	 * Male: he
+	 * Otherwise: they
+	 * 
+	 * @param gender
+	 * @return
+	 */
+	private String getPronoun(String gender)
+	{
+		if (gender.equalsIgnoreCase("Female"))
+			return "She";
+		if (gender.equalsIgnoreCase("Male"))
+			return "He";
+		return "They";
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param player
+	 * @return
+	 */
+	private String getHealthDescription(Player player)
+	{
+		if (player.getHealth() <= 6)
+			return "seriously injured";
+		if (player.getHealth() < 20)
+			return "slightly injured";
+		return "completely healthy";
+	}
+	
+	private String conjugate(String string, String gender)
+	{
+		if (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"))
+			string += "s";
+		
+		return string;
 	}
 }
