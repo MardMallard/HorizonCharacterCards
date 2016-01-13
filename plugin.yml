@@ -1,6 +1,7 @@
 name: HorizonCharacterCards
 main: com.gmail.Rhisereld.HorizonCharacterCards.Main
 version: 1.0
+softdepend: [HorizonProfessions]
 commands:
   card:
     description: All Horizon Character Card commands.

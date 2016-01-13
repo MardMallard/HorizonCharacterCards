@@ -33,5 +33,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/Spigot/spigot-1.8.8.jar"/>
+	<classpathentry kind="lib" path="D:/My Documents/Project Horizon/Releases/HorizonProfessions/HorizonProfessions_1.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -10,6 +10,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.gmail.Rhisereld.HorizonProfessions.ProfessionAPI;
+
 public class Card 
 {
 	FileConfiguration config;
@@ -226,10 +228,11 @@ public class Card
 		data.set(path + "description", this.description);
 	}
 	
-	public void view(Player player)
+	public void view(ProfessionAPI prof, Player player)
 	{
 		String pronoun = getPronoun();
 		String lookConjugated = conjugate("look");
+		String hasConjugated = conjugate("has");
 		Player cardOwner = Bukkit.getPlayer(ownerUUID);
 		String health = getHealthDescription(player);
 		ItemStack[] contents = cardOwner.getInventory().getContents();
@@ -245,17 +248,33 @@ public class Card
 		if (health != null)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " " + getHealthDescription(player) + ".");
 		if (cardOwner.getFoodLevel() <= 6)
-			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE  + pronoun + " " + lookConjugated + " malnourished.");
+			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " malnourished.");
 		if (freeSlots < 18)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " burdened with a lot of "
 					+ "items.");
 		if (threatLevel >= 5)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " armed to the teeth.");
 		else if (threatLevel >= 1)
-			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + conjugate("has") + " a weapon strapped to "
+			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + " a weapon strapped to "
 					+ getPossessive() + " hip.");
-		player.sendMessage(new String[]{ChatColor.GREEN + "* " + ChatColor.WHITE + description,
-			ChatColor.GREEN + "*---------*"});
+		if (prof != null)
+			if (prof.isValidProfession("engineer") && prof.hasTier(ownerUUID, "engineer", prof.getTiers().size() - 1))
+				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + 
+						" a belt full of gadgets for working with electronics.");
+			else if (prof.isValidProfession("labourer") && prof.hasTier(ownerUUID, "labourer", prof.getTiers().size() - 1))
+				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + 
+						" thick dirt-caked leather gloves designed for hard work.");
+			else if (prof.isValidProfession("medic") && prof.hasTier(ownerUUID, "medic", prof.getTiers().size() - 1))
+				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + 
+						" a belt full of sterile-looking medical equipment.");
+			else if (prof.isValidProfession("pilot") && prof.hasTier(ownerUUID, "pilot", prof.getTiers().size() - 1))
+				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + 
+						" a hands-off navigational HUD covering " + getPossessive() + " eyes.");
+			else if (prof.isValidProfession("hunter") && prof.hasTier(ownerUUID, "hunter", prof.getTiers().size() - 1))
+				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + 
+						" a skinning knife and various devices for butchering wild animals.");
+		player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + description); 
+		player.sendMessage(ChatColor.GREEN + "*---------*");
 	}
 	
 	/**

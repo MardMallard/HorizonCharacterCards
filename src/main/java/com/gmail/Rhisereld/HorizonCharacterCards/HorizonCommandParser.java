@@ -7,15 +7,19 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import com.gmail.Rhisereld.HorizonProfessions.ProfessionAPI;
+
 public class HorizonCommandParser implements CommandExecutor
 {
 	FileConfiguration config;
 	FileConfiguration data;
+	ProfessionAPI prof;
 	
-	public HorizonCommandParser(FileConfiguration config, FileConfiguration data)
+	public HorizonCommandParser(FileConfiguration config, FileConfiguration data, ProfessionAPI prof)
 	{
 		this.config = config;
 		this.data = data;
+		this.prof = prof;
 	}
 	
     /**
@@ -157,7 +161,7 @@ public class HorizonCommandParser implements CommandExecutor
 		}
 		
 		Player player = (Player) sender;
-		new Card(config, data, player).view(player);
+		new Card(config, data, player).view(prof, player);
 	}
 	
 	/**

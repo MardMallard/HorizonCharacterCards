@@ -7,15 +7,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
+import com.gmail.Rhisereld.HorizonProfessions.ProfessionAPI;
+
 public class CardListener implements Listener
 {
 	FileConfiguration config;
 	FileConfiguration data;
+	ProfessionAPI prof;
 	
-	public CardListener(FileConfiguration config, FileConfiguration data)
+	public CardListener(FileConfiguration config, FileConfiguration data, ProfessionAPI prof)
 	{
 		this.config = config;
 		this.data = data;
+		this.prof = prof;
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -31,6 +35,6 @@ public class CardListener implements Listener
 			return;
 		
 		Player player = (Player) event.getRightClicked();
-		new Card(config, data, player).view(clicker);
+		new Card(config, data, player).view(prof, clicker);
 	}
 }
