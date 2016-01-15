@@ -104,6 +104,24 @@ public class HorizonCommandParser implements CommandExecutor
 					givePossibleAttributes(sender);
 			}
 			
+			//card create [name]
+			else if (args[0].equalsIgnoreCase("create"))
+				if (args.length >= 2)
+					createCard(sender, args);
+				else
+				{
+					sender.sendMessage(ChatColor.GREEN + "Proper usage: /card create [name]");
+					sender.sendMessage(ChatColor.GREEN + "Enter the name of the new character card.");
+				}
+			else if (args[0].equalsIgnoreCase("delete"))
+				if (args.length >= 2)
+					deleteCard(sender, args);
+				else
+				{
+					sender.sendMessage(ChatColor.GREEN + "Proper usage: /card delete [name]");
+					sender.sendMessage(ChatColor.GREEN + "Enter the name of the card you wish to delete.");
+				}
+			
 			return true;
 		}
 		
@@ -138,6 +156,11 @@ public class HorizonCommandParser implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.GREEN + "/card set");
 			sender.sendMessage("Set an attribute in your character card.");
+		}
+		if (sender.hasPermission("horizoncards.create"))
+		{
+			sender.sendMessage(ChatColor.GREEN + "/card create [name]");
+			sender.sendMessage("Create a new character card.");
 		}
 	}
 	
@@ -339,6 +362,84 @@ public class HorizonCommandParser implements CommandExecutor
 		}
 		
 		sender.sendMessage(ChatColor.GREEN + "Description set to: " + builder.toString());
+	}
+	
+	/**
+	 * createCard() creates a new character card for the player and makes it he current card.
+	 * 
+	 * @param sender
+	 * @param name
+	 */
+	private void createCard(CommandSender sender, String[] name)
+	{
+		if (!sender.hasPermission("horizoncards.create"))
+		{
+			sender.sendMessage(ChatColor.RED + "You don't have permission to create a new card.");
+			return;
+		}
+		
+		if (!(sender instanceof Player))
+		{
+			sender.sendMessage(ChatColor.RED + "That command can only be used by players.");
+			return;
+		}
+		
+		//Build the name - may be multiple words
+		Player player = (Player) sender;
+		StringBuilder builder = new StringBuilder();
+		for (int i = 1; i < name.length; i++)
+		{
+		    builder.append(name[i]);
+		    builder.append(" ");
+		}
+		if (builder.length() > 0)
+			builder.setLength(builder.length() - 1);
+			   
+		//Set the name
+		try { new Card(config, data, player).createCard(builder.toString()); }
+		catch (IllegalArgumentException e)
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Card created: " + builder.toString());
+	}
+	
+	private void deleteCard(CommandSender sender, String[] name)
+	{
+		if (!sender.hasPermission("horizoncards.delete"))
+		{
+			sender.sendMessage(ChatColor.RED + "You don't have permission to delete a card.");
+			return;
+		}
+		
+		if (!(sender instanceof Player))
+		{
+			sender.sendMessage(ChatColor.RED + "That command can only be used by players.");
+			return;
+		}
+		
+		//Build the name - may be multiple words
+		Player player = (Player) sender;
+		StringBuilder builder = new StringBuilder();
+		for (int i = 1; i < name.length; i++)
+		{
+		    builder.append(name[i]);
+		    builder.append(" ");
+		}
+		if (builder.length() > 0)
+			builder.setLength(builder.length() - 1);
+			   
+		//Set the name
+		try { new Card(config, data, player).deleteCard(builder.toString()); }
+		catch (IllegalArgumentException e)
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Card deleted: " + builder.toString());
 	}
 	
 	/**

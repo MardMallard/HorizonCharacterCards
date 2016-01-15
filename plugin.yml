@@ -20,3 +20,5 @@ permissions:
       horizoncards.set.gender: true
       horizoncards.set.race: true
       horizoncards.set.description: true
+      horizoncards.create: true
+      horizoncards.delete: true

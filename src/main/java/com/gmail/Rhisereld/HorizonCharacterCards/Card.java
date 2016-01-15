@@ -1,6 +1,8 @@
 package com.gmail.Rhisereld.HorizonCharacterCards;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -69,6 +71,51 @@ public class Card
 		
 		//Set nickname in chat.
 		Bukkit.getPlayer(ownerUUID).setDisplayName(name);
+	}
+	
+	/**
+	 * createCard() creates a new card for the player by a given name.
+	 * The card has all default values when created.
+	 * 
+	 * @param name
+	 * @throws IllegalArgumentException
+	 */
+	public void createCard(String name) throws IllegalArgumentException
+	{
+		if (name.length() > config.getInt("max name length", 30))
+			throw new IllegalArgumentException("Name is too long.");
+		
+		if (data.getConfigurationSection("cards." + ownerUUID).getKeys(false).contains(name))
+			throw new IllegalArgumentException("You already have a card by that name.");
+		
+		data.set("cards." + ownerUUID + ".currentCard", name);
+	}
+	
+	/**
+	 * deleteCard() removes the card from the player.
+	 * If they have other cards, their current card is set to the next card found.
+	 * Otherwise, a new card is created for their player name.
+	 * 
+	 * @param name
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteCard(String name) throws IllegalArgumentException
+	{
+		Set<String> cards;
+		try 
+		{
+			cards = data.getConfigurationSection("cards." + ownerUUID).getKeys(false);
+			cards.remove("currentCard");
+		}
+		catch (NullPointerException e) { cards = new HashSet<String>(); }
+		
+		data.getConfigurationSection("cards." + ownerUUID + ".").set(name, null);
+		
+		if (data.getString("cards." + ownerUUID + ".currentCard").equalsIgnoreCase(name))
+			if (cards.isEmpty())
+				data.set("cards." + ownerUUID + ".currentCard", Bukkit.getPlayer(ownerUUID).getName());
+			else
+				data.set("cards." + ownerUUID + ".currentCard", cards.iterator().next());
 	}
 	
 	/**
