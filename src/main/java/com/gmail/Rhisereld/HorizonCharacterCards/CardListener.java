@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.gmail.Rhisereld.HorizonProfessions.ProfessionAPI;
 
@@ -36,5 +37,13 @@ public class CardListener implements Listener
 		
 		Player player = (Player) event.getRightClicked();
 		new Card(config, data, player).view(prof, clicker);
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerJoin(PlayerJoinEvent event)
+	{
+		//Set the player's nickname according to their character card.
+		Player player = event.getPlayer();
+		player.setDisplayName(new Card(config, data, player).getName());
 	}
 }

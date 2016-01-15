@@ -252,7 +252,7 @@ public class Card
 		if (freeSlots < 18)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " burdened with a lot of "
 					+ "items.");
-		if (threatLevel >= 5)
+		if (threatLevel >= 10)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + " armed to the teeth.");
 		else if (threatLevel >= 1)
 			player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + " a weapon strapped to "
@@ -271,8 +271,8 @@ public class Card
 				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + 
 						" a hands-off navigational HUD covering " + getPossessive() + " eyes.");
 			else if (prof.isValidProfession("hunter") && prof.hasTier(ownerUUID, "hunter", prof.getTiers().size() - 1))
-				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + hasConjugated + 
-						" a skinning knife and various devices for butchering wild animals.");
+				player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + pronoun + " " + lookConjugated + 
+						" like " + pronoun + " can take a punch.");
 		player.sendMessage(ChatColor.GREEN + "* " + ChatColor.WHITE + description); 
 		player.sendMessage(ChatColor.GREEN + "*---------*");
 	}
