@@ -1,5 +1,7 @@
 package com.gmail.Rhisereld.HorizonCharacterCards;
 
+import java.util.Set;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -113,6 +115,7 @@ public class HorizonCommandParser implements CommandExecutor
 					sender.sendMessage(ChatColor.GREEN + "Proper usage: /card create [name]");
 					sender.sendMessage(ChatColor.GREEN + "Enter the name of the new character card.");
 				}
+			//card delete [name]
 			else if (args[0].equalsIgnoreCase("delete"))
 				if (args.length >= 2)
 					deleteCard(sender, args);
@@ -121,7 +124,16 @@ public class HorizonCommandParser implements CommandExecutor
 					sender.sendMessage(ChatColor.GREEN + "Proper usage: /card delete [name]");
 					sender.sendMessage(ChatColor.GREEN + "Enter the name of the card you wish to delete.");
 				}
-			
+			//card switch [name]
+			else if (args[0].equalsIgnoreCase("switch"))
+				if (args.length >= 2)
+					switchCard(sender, args);
+				else
+				{
+					sender.sendMessage(ChatColor.GREEN + "Proper usage: /card switch [name]");
+					sender.sendMessage(ChatColor.GREEN + "Enter the name of the character card you would like to use.");
+					sender.sendMessage(ChatColor.GREEN + "Cards: " + getCards(sender));
+				}
 			return true;
 		}
 		
@@ -161,6 +173,16 @@ public class HorizonCommandParser implements CommandExecutor
 		{
 			sender.sendMessage(ChatColor.GREEN + "/card create [name]");
 			sender.sendMessage("Create a new character card.");
+		}
+		if (sender.hasPermission("horizoncards.delete"))
+		{
+			sender.sendMessage(ChatColor.GREEN + "/card delete [name]");
+			sender.sendMessage("Delete a character card.");
+		}
+		if (sender.hasPermission("horizoncards.switch"))
+		{
+			sender.sendMessage(ChatColor.GREEN + "/card switch [name");
+			sender.sendMessage("Switch to a different character card.");
 		}
 	}
 	
@@ -406,6 +428,13 @@ public class HorizonCommandParser implements CommandExecutor
 		sender.sendMessage(ChatColor.GREEN + "Card created: " + builder.toString());
 	}
 	
+	/**
+	 * deleteCard() deletes the card specified.
+	 * If it is the card currently in use, the card currently in use is changed to the next available card.
+	 * 
+	 * @param sender
+	 * @param name
+	 */
 	private void deleteCard(CommandSender sender, String[] name)
 	{
 		if (!sender.hasPermission("horizoncards.delete"))
@@ -440,6 +469,86 @@ public class HorizonCommandParser implements CommandExecutor
 		}
 		
 		sender.sendMessage(ChatColor.GREEN + "Card deleted: " + builder.toString());
+	}
+	
+	/**
+	 * switchCard() switches the current card of a player.
+	 * 
+	 * @param sender
+	 * @param name
+	 */
+	private void switchCard(CommandSender sender, String[] name)
+	{
+		if (!sender.hasPermission("horizoncards.switch"))
+		{
+			sender.sendMessage(ChatColor.RED + "You don't have permission to switch cards.");
+			return;
+		}
+		
+		if (!(sender instanceof Player))
+		{
+			sender.sendMessage(ChatColor.RED + "That command can only be used by players.");
+			return;
+		}
+		
+		//Build the name - may be multiple words
+		Player player = (Player) sender;
+		StringBuilder builder = new StringBuilder();
+		for (int i = 1; i < name.length; i++)
+		{
+		    builder.append(name[i]);
+		    builder.append(" ");
+		}
+		if (builder.length() > 0)
+			builder.setLength(builder.length() - 1);
+			   
+		//Set the name
+		try { new Card(config, data, player).switchCard(builder.toString()); }
+		catch (IllegalArgumentException e)
+		{ 
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Now using card: " + builder.toString());
+	}
+	
+	/**
+	 * getCards() returns a string containing all the cards that a player currently has.
+	 * 
+	 * @param sender
+	 * @return
+	 */
+	private String getCards(CommandSender sender)
+	{
+		if (!(sender instanceof Player))
+			return "None";
+		
+		Player player = (Player) sender;
+		Set<String> cards;
+		
+		try 
+		{ 
+			cards = data.getConfigurationSection("cards." + player.getUniqueId()).getKeys(false);
+			cards.remove("currentCard");
+		} 
+		catch (NullPointerException e)
+		{ return "None"; }
+		
+		if (cards.isEmpty())
+			return "None";
+		
+		//Build the name - may be multiple words
+		StringBuilder builder = new StringBuilder();
+		for (String card: cards)
+		{
+		    builder.append(card);
+		    builder.append(", ");
+		}
+		if (builder.length() > 0)
+			builder.setLength(builder.length() - 2);
+		
+		return builder.toString();
 	}
 	
 	/**

@@ -22,3 +22,4 @@ permissions:
       horizoncards.set.description: true
       horizoncards.create: true
       horizoncards.delete: true
+      horizoncards.switch: true

@@ -305,6 +305,31 @@ public class Card
 		data.set("cards." + ownerUUID + ".currentCard", currentCard);
 	}
 	
+	/**
+	 * switchCard() changes the card that the player is currently using.
+	 * An IllegalArgumentException will be thrown if the card does not currently exist.
+	 * 
+	 * @param name
+	 * @throws IllegalArgumentException
+	 */
+	void switchCard(String name) throws IllegalArgumentException
+	{
+		Set<String> cards;
+		
+		try 
+		{ 
+			cards = data.getConfigurationSection("cards." + ownerUUID).getKeys(false);
+			cards.remove("currentCard");
+		} 
+		catch (NullPointerException e)
+		{ cards = new HashSet<String>(); }
+		
+		if (cards.isEmpty() || !cards.contains(name))
+			throw new IllegalArgumentException("You don't have a card by that name.");
+		
+		setCurrentCard(name);
+	}
+	
 	public void view(ProfessionAPI prof, Player player)
 	{
 		String pronoun = getPronoun();
