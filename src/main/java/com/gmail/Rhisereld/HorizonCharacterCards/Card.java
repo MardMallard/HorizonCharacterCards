@@ -45,6 +45,7 @@ public class Card
 		gender = data.getString(path + "gender", config.getString("default gender"));
 		race = data.getString(path + "race", config.getString("default race"));
 		description = data.getString(path + "description", config.getString("default description"));
+		data.set(path + ".created", true);
 	}
 	
 	/**
@@ -66,6 +67,7 @@ public class Card
 		path = "cards." + ownerUUID + "." + name + ".";
 		currentCard = name;
 		data.set("cards." + ownerUUID + ".currentCard", currentCard);
+		data.set(path + ".created", true);
 		
 		this.name = name;
 		
@@ -85,10 +87,24 @@ public class Card
 		if (name.length() > config.getInt("max name length", 30))
 			throw new IllegalArgumentException("Name is too long.");
 		
-		if (data.getConfigurationSection("cards." + ownerUUID).getKeys(false).contains(name))
+		Set<String> cards;
+		try 
+		{ 
+			cards = data.getConfigurationSection("cards." + ownerUUID).getKeys(false);
+			cards.remove("currentCard");
+		} 
+		catch (NullPointerException e)
+		{ cards = new HashSet<String>(); }
+		
+		
+		if (cards.contains(name))
 			throw new IllegalArgumentException("You already have a card by that name.");
 		
-		data.set("cards." + ownerUUID + ".currentCard", name);
+		if (cards.size() >= config.getInt("max cards allowed"))
+			throw new IllegalArgumentException("You already have the maximum number of permitted cards.");
+		
+		setCurrentCard(name);
+		data.set(path + ".created", true);
 	}
 	
 	/**
@@ -108,6 +124,9 @@ public class Card
 			cards.remove("currentCard");
 		}
 		catch (NullPointerException e) { cards = new HashSet<String>(); }
+		
+		if (!cards.contains(name))
+			throw new IllegalArgumentException("You do not have a card by that name.");
 		
 		data.getConfigurationSection("cards." + ownerUUID + ".").set(name, null);
 		
@@ -273,6 +292,17 @@ public class Card
 		
 		this.description += description;
 		data.set(path + "description", this.description);
+	}
+	
+	/**
+	 * setCurrentCard() changes the card that the player is currently using.
+	 * 
+	 * @param name
+	 */
+	private void setCurrentCard(String name)
+	{
+		currentCard = name;
+		data.set("cards." + ownerUUID + ".currentCard", currentCard);
 	}
 	
 	public void view(ProfessionAPI prof, Player player)
