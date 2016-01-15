@@ -54,7 +54,7 @@ public class Card
 	 * @param name
 	 * @throws IllegalArgumentException
 	 */
-	public void setName(String name) throws IllegalArgumentException
+	void setName(String name) throws IllegalArgumentException
 	{
 		if (name.length() > config.getInt("max name length", 30))
 			throw new IllegalArgumentException("Name is too long.");
@@ -82,7 +82,7 @@ public class Card
 	 * @param name
 	 * @throws IllegalArgumentException
 	 */
-	public void createCard(String name) throws IllegalArgumentException
+	void createCard(String name) throws IllegalArgumentException
 	{
 		if (name.length() > config.getInt("max name length", 30))
 			throw new IllegalArgumentException("Name is too long.");
@@ -115,7 +115,7 @@ public class Card
 	 * @param name
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteCard(String name) throws IllegalArgumentException
+	void deleteCard(String name) throws IllegalArgumentException
 	{
 		Set<String> cards;
 		try 
@@ -142,7 +142,7 @@ public class Card
 	 * 
 	 * @return
 	 */
-	public String getName()
+	String getName()
 	{
 		return name;
 	}
@@ -155,7 +155,7 @@ public class Card
 	 * @param age
 	 * @throws IllegalArgumentException
 	 */
-	public void setAge(int age) throws IllegalArgumentException
+	void setAge(int age) throws IllegalArgumentException
 	{
 		int minAge = config.getInt("min age", 5);
 		int maxAge = config.getInt("max age", 150);
@@ -174,7 +174,7 @@ public class Card
 	 * 
 	 * @return
 	 */
-	public int getAge()
+	int getAge()
 	{
 		return age;
 	}
@@ -185,7 +185,7 @@ public class Card
 	 * @param gender
 	 * @throws IllegalArgumentException
 	 */
-	public void setGender(String gender) throws IllegalArgumentException
+	void setGender(String gender) throws IllegalArgumentException
 	{
 		List<String> validGenders = config.getStringList("valid genders");
 		
@@ -209,7 +209,7 @@ public class Card
 	 * 
 	 * @return
 	 */
-	public String getGender()
+	String getGender()
 	{
 		return gender;
 	}
@@ -222,7 +222,7 @@ public class Card
 	 * @param race
 	 * @throws IllegalArgumentException
 	 */
-	public void setRace(String race) throws IllegalArgumentException
+	void setRace(String race) throws IllegalArgumentException
 	{
 		List<String> validRaces = config.getStringList("valid races");
 		
@@ -246,7 +246,7 @@ public class Card
 	 * 
 	 * @return
 	 */
-	public String getRace()
+	String getRace()
 	{
 		return race;
 	}
@@ -259,7 +259,7 @@ public class Card
 	 * @param description
 	 * @throws IllegalArgumentException
 	 */
-	public void setDescription(String description) throws IllegalArgumentException
+	void setDescription(String description) throws IllegalArgumentException
 	{
 		if (description.length() > config.getInt("max description length", 100))
 			throw new IllegalArgumentException("That description is too long.");
@@ -273,7 +273,7 @@ public class Card
 	 * 
 	 * @return
 	 */
-	public String getDescription()
+	String getDescription()
 	{
 		return description;
 	}
@@ -285,7 +285,7 @@ public class Card
 	 * 
 	 * @param description
 	 */
-	public void addDescription(String description)
+	void addDescription(String description)
 	{
 		if (description.length() + this.description.length() > config.getInt("max description length", 100))
 			throw new IllegalArgumentException("Total description is too long");
@@ -330,7 +330,7 @@ public class Card
 		setCurrentCard(name);
 	}
 	
-	public void view(ProfessionAPI prof, Player player)
+	void view(ProfessionAPI prof, Player player)
 	{
 		String pronoun = getPronoun();
 		String lookConjugated = conjugate("look");
